@@ -18,7 +18,7 @@ hasversiontag="false"
 scope="patch"
 displayonly="false"
 forcetag="false"
-push="true"
+autopush="true"
 prefix=""
 forcedversion=
 versionname=
@@ -91,7 +91,7 @@ while getopts "b:v:s:oflp:" opt; do
       forcetag="true"
       ;;
     l)
-      push="false"
+      autopush="false"
       ;;
     p)
       prefix="$OPTARG"
@@ -507,9 +507,9 @@ $__commitlist"
 
       git tag -a $__version -m "$__message"
 
-      # If we have a remote, we push there
+      # If we have a remote, and if the -l flag is not set, we push there
       local __remotes=$(git remote)
-      if [ -n $__remotes ] && [ "$push" == "true" ]; then
+      if [ -n $__remotes ] && [ "$autopush" == "true" ]; then
         for __remote in $__remotes; do
           # Use no-verify to avoid problems with git hooks (e.g., lfs).
           git push $__remote $__version --no-verify > /dev/null
