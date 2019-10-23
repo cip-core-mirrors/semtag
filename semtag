@@ -11,13 +11,14 @@ NUMERIC_REGEX='^[0-9]+$'
 MAX_BRANCH_LENGTH=50
 
 # Global variables
-FIRST_VERSION="v0.0.0"
+FIRST_VERSION="0.0.0"
 finalversion=$FIRST_VERSION
 lastversion=$FIRST_VERSION
 hasversiontag="false"
 scope="patch"
 displayonly="false"
 forcetag="false"
+push="true"
 prefix=""
 forcedversion=
 versionname=
@@ -28,7 +29,7 @@ Usage:
   $PROG
   $PROG getlast
   $PROG getfinal
-  $PROG (final|alpha|beta|candidate) [-s <scope> (major|minor|patch|auto) | -o]
+  $PROG (final|alpha|beta|candidate) [-s <scope> (major|minor|patch|auto) | -o | -f | -p <prefix> | -l ]
   $PROG --help
   $PROG --version
 Options:
@@ -48,6 +49,7 @@ Options:
   -o         Output the version only, shows the bumped version, but doesn't tag.
   -f         Forces to tag, even if there are unstaged or uncommited changes.
   -p         Change the prefix used in the version tag (defaults to nothing)
+  -l         Only create the tag locally, do not push the tag to the remote.
 Commands:
   --help     Print this help message.
   --version  Prints the program's version.
@@ -71,7 +73,7 @@ ACTION="$1"
 shift
 
 # We get the parameters
-while getopts "b:v:s:ofp:" opt; do
+while getopts "b:v:s:oflp:" opt; do
   case $opt in
     b)
       defaultbranch="$OPTARG"
@@ -87,6 +89,9 @@ while getopts "b:v:s:ofp:" opt; do
       ;;
     f)
       forcetag="true"
+      ;;
+    l)
+      push="false"
       ;;
     p)
       prefix="$OPTARG"
@@ -504,7 +509,7 @@ $__commitlist"
 
       # If we have a remote, we push there
       local __remotes=$(git remote)
-      if [[ -n $__remotes ]]; then
+      if [ -n $__remotes ] && [ "$push" == "true" ]; then
         for __remote in $__remotes; do
           # Use no-verify to avoid problems with git hooks (e.g., lfs).
           git push $__remote $__version --no-verify > /dev/null
