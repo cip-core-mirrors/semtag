@@ -458,9 +458,9 @@ function increase_version {
     fi
     local __commitlist
     if [ "$finalversion" == "$FIRST_VERSION" ] || [ "$hasversiontag" != "true" ]; then
-      __commitlist="$(git log --pretty=oneline | cat)"
+      __commitlist="$(git log --pretty=format:"%cd : %s" | cat)"
     else
-      __commitlist="$(git log --pretty=oneline $finalversion... | cat)"
+      __commitlist="$(git log --pretty=format:"%cd : %s" $finalversion... | cat)"
     fi
 
     # If we are forcing a bump, we add bump to the commit list
