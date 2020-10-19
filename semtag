@@ -31,6 +31,7 @@ Usage:
   $PROG --help
   $PROG --version
 Options:
+  -b         The branch to use as default, eg main or master. Default: master
   -s         The scope that must be increased, can be major, minor or patch.
                The resulting version will match X.Y.Z(-PRERELEASE)(+BUILD)
                where X, Y and Z are positive integers, PRERELEASE is an optionnal
@@ -68,8 +69,11 @@ ACTION="$1"
 shift
 
 # We get the parameters
-while getopts "v:s:of" opt; do
+while getopts "b:v:s:of" opt; do
   case $opt in
+    b)
+      defaultbranch="$OPTARG"
+      ;;
     v)
       forcedversion="$OPTARG"
       ;;
@@ -161,7 +165,7 @@ function compare_numeric {
   local __first=$1
   local __second=$2
   local __result=$3
-  
+
   if (( "$__first" < "$__second" )) ; then
     eval "$__result=-1"
   elif (( "$__first" > "$__second" )) ; then
@@ -179,7 +183,7 @@ function compare_alphanumeric {
   local __first=$1
   local __second=$2
   local __result=$3
-  
+
   if [[ "$__first" < "$__second" ]] ; then
     eval "$__result=-1"
   elif [[ "$__first" > "$__second" ]] ; then
@@ -198,7 +202,7 @@ function get_latest_of_two {
   local __second=$2
   local __result
   local __latest=$3
-  
+
   compare_versions $__first $__second __result
   case $__result in
     0)
@@ -222,14 +226,14 @@ function compare_identifier_part {
   local __second=$2
   local __result=$3
   local compareresult
-  
+
   if [[ "$__first" =~ $NUMERIC_REGEX ]] && [[ "$__second" =~ $NUMERIC_REGEX ]] ; then
     compare_numeric "$__first" "$__second" compareresult
     eval "$__result=$compareresult"
     return 0
   fi
-  
-  
+
+
   compare_alphanumeric "$__first" "$__second" compareresult
   eval "$__result=$compareresult"
 }
@@ -247,13 +251,13 @@ function compare_identifiers {
   if [[ -n "$__first" ]] && [[ -n "$__second" ]]; then
     explode_identifier "${__first}" explodedidentifierfirst
     explode_identifier "${__second}" explodedidentifiersecond
-    
-    firstsize=${#explodedidentifierfirst[@]}    
+
+    firstsize=${#explodedidentifierfirst[@]}
     secondsize=${#explodedidentifiersecond[@]}
     minlength=$(( $firstsize<$secondsize ? $firstsize : $secondsize ))
     for (( i = 0 ; i < $minlength ; i++ )); do
       compare_identifier_part "${explodedidentifierfirst[$i]}" "${explodedidentifiersecond[$i]}" partresult
-      case $partresult in 
+      case $partresult in
         0)
           ;;
         *)
@@ -670,10 +674,10 @@ case $ACTION in
     ;;
   final)
     init
-    diff=$(git diff master | cat)
+    diff=$(git diff ${defaultbranch:=master} | cat)
     if [ "$forcetag" == "false" ]; then
       if [ -n "$diff" ]; then
-        echo "ERROR: Branch must be updated with master for final versions"
+        echo "ERROR: Branch must be updated with ${defaultbranch:=master} for final versions"
         exit 1
       fi
     fi
