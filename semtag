@@ -651,7 +651,8 @@ function get_current {
 }
 
 function init {
-  git fetch > /dev/null
+  # Skip fetch for speed.
+  #git fetch > /dev/null
   TAGS="$(git tag --merged)"
   IFS=$'\n' read -rd '' -a TAG_ARRAY <<<"$TAGS"
 
