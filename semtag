@@ -435,9 +435,9 @@ function increase_version {
     bump_version __version
   else
     if [[ $forcedversion =~ $SEMVER_REGEX ]] ; then
-      compare_versions $forcedversion $lastversion __result
+      compare_versions $forcedversion $finalversion __result
       if [ $__result -le 0 ]; then
-        echo "Version can't be lower than last version: $lastversion"
+        echo "Version can't be lower than last final version: $finalversion"
         exit 1
       fi
     else
@@ -615,7 +615,7 @@ function get_current {
     eval "$1=$lastversion"
   else
     local __buildinfo="$(git rev-parse --short HEAD)"
-    local __currentbranch="$(git rev-parse --abbrev-ref HEAD)"
+    local __currentbranch="$(git rev-parse --abbrev-ref HEAD | cut -c1-50)"
     if [ "$__currentbranch" != "master" ]; then
       __buildinfo="$__currentbranch.$__buildinfo"
     fi
