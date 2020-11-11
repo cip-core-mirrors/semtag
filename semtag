@@ -620,7 +620,7 @@ function get_current {
     local __buildinfo="$(git rev-parse --short HEAD)"
     local __currentbranch="$(git rev-parse --abbrev-ref HEAD | cut -c1-$MAX_BRANCH_LENGTH)"
     if [ "$__currentbranch" != "master" ]; then
-      __buildinfo="$__currentbranch.$__buildinfo"
+      __buildinfo="$__buildinfo.$__currentbranch"
     fi
 
     local __suffix=
