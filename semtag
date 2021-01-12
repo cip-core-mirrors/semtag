@@ -495,7 +495,8 @@ $__commitlist"
       local __remotes=$(git remote)
       if [[ -n $__remotes ]]; then
         for __remote in $__remotes; do
-          git push $__remote $__version > /dev/null
+          # Use no-verify to avoid problems with git hooks (e.g., lfs).
+          git push $__remote $__version --no-verify > /dev/null
           if [ $? -eq 0 ]; then
             echo "$__version pushed to $__remote"
           else
