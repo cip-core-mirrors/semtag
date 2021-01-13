@@ -10,8 +10,9 @@
 ##############################################################################################
 
 # Test:
-# bin/bash/build_docker_tag.sh "Lorem-ipsum dolor--sit amet, consectetur+ adipiscing elit. Sed rutrum mauris quis^ cursus/ pulvinar. Vestibulum vitae magna leo. Pellentesque vitae fusce."
-# Should return Lorem-ipsum__dolor--sit__amet____consectetur____adipiscing__elit.__Sed__rutrum__mauris__quis____cursus____pulvinar.__Vestibulum_
+# ./sanitize_docker_tag.sh "Lorem-ipsum dolor--sit amet, consectetur+ adipiscing elit. Sed rutrum mauris quis^ cursus/ pulvinar. Vestibulum vitae magna leo. Pellentesque vitae fusce."
+# Should return:
+# Lorem-ipsum__dolor--sit__amet____consectetur____adipiscing__elit.__Sed__rutrum__mauris__quis____cursus____pulvinar.__Vestibulum_
 
 # From https://docs.docker.com/engine/reference/commandline/tag/
 # A tag name must be valid ASCII and may contain lowercase and uppercase letters, digits, underscores, periods and dashes.
