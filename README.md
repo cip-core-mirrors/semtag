@@ -17,7 +17,7 @@ Portability, mostly. You can use the script in any project that uses Git as a ve
 
 Nebula Release is for releasing and publishing components and tries to automate the whole process from tagging to publishing. The goal of the `semtag` script is to only tag release versions, leaving the release process up to the developer.
 
-Plus, the `semtag` sctipt doesn't depend on the build system (so no need to use Gradle), so it can be used in any project.
+Plus, the `semtag` script doesn't depend on the build system (so no need to use Gradle), so it can be used in any project.
 
 ## Usage
 
@@ -30,7 +30,7 @@ Starts from version `0.0.0`, so the first time you initialize a version, it will
 Use the script as follows:
 
 ```
-$ semtag <commdand> <options>
+$ semtag <command> <options>
 ```
 
 Info commands:
@@ -130,7 +130,7 @@ Current final version: v1.0.0
 Last tagged version:   v1.1.1-beta.1
 ```
 
-Now the patch has been bumped, since a beta version is considered to be lower than a release candidate, so is the verison number that bumps up, using the provided scope (`patch` in this case).
+Now the patch has been bumped, since a beta version is considered to be lower than a release candidate, so is the version number that bumps up, using the provided scope (`patch` in this case).
 
 ### Forcing a tag
 
