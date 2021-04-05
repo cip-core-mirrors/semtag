@@ -2,7 +2,7 @@
 
 Semantic Tagging Script for Git
 
-[Version: v0.1.0]
+[Version: cip-v0.1.1]
 
 Notes: *This script is inspired by the [Nebula Release Plugin](https://github.com/nebula-plugins/nebula-release-plugin), and borrows a couple of lines from [Semver Bash Tool](https://github.com/fsaintjacques/semver-tool) (mostly the version comparison and the semantic version regex).*
 
