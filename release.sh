@@ -1,16 +1,23 @@
 #!/usr/bin/env bash 
 
-SCOPE="$1"
+SEMTAG_OPTS="-p cip-v -b cip-master"
 
-if [ -z "$SCOPE" ]; then
-  SCOPE="auto"
+SEMTAG_COMMAND="$1"
+SEMTAG_SCOPE="$2"
+
+if [ -z "$SEMTAG_COMMAND" ]; then
+  SEMTAG_COMMAND="final"
 fi
 
-echo "Using scope $SCOPE"
+if [ -z "$SEMTAG_SCOPE" ]; then
+  SEMTAG_SCOPE="auto"
+fi
+
+echo "Using command '$SEMTAG_COMMAND' with scope '$SEMTAG_SCOPE'"
 
 # We get the next version, without tagging
 echo "Getting next version"
-nextversion="$(source semtag final -fos $SCOPE)"
+nextversion="$(source semtag $SEMTAG_COMMAND $SEMTAG_OPTS -fos $SEMTAG_SCOPE)"
 echo "Publishing with version: $nextversion"
 
 # We replace the placeholder in the source with the new version
@@ -40,4 +47,4 @@ if ! git push ; then
 fi
 
 # We update the tag with the new version
-source semtag final -f -v $nextversion
+source semtag $SEMTAG_COMMAND $SEMTAG_OPTS -f -v $nextversion
